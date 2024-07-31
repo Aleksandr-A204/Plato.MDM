@@ -15,5 +15,11 @@ namespace Plato.MDM.Repositories
 
         public async Task<IEnumerable<MdmDirectory>> GetAllDirectoriesAsync() =>
             await _context.MdmDirectories.Include(x => x.DirectoryDomain).Include(x => x.DirectoryLevel).ToListAsync();
+
+        public async Task<MdmDirectory> EditDirectoryAsync(Guid id)
+        {
+
+            return new MdmDirectory();
+        }
     }
 }
