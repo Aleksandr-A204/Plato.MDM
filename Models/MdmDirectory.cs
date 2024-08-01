@@ -6,7 +6,7 @@ namespace Plato.MDM.Models;
 public partial class MdmDirectory
 {
     [DataMember(Name = "id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 
     [DataMember(Name = "name")]
     public string Name { get; set; } = null!;
@@ -15,10 +15,10 @@ public partial class MdmDirectory
     public string? Description { get; set; }
 
     [DataMember(Name = "directoryDomainId")]
-    public Guid? DirectoryDomainId { get; set; }
+    public Guid? DirectoryDomainId { get; }
 
     [DataMember(Name = "directoryLevelId")]
-    public Guid? DirectoryLevelId { get; set; }
+    public Guid? DirectoryLevelId { get; }
 
     [DataMember(Name = "directoryDomain")]
     public MdmDirectoryDomain? DirectoryDomain { get; set; }

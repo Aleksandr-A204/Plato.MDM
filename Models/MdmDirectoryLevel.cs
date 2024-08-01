@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Plato.MDM.Models;
+﻿namespace Plato.MDM.Models;
 
 public partial class MdmDirectoryLevel
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 
     public string Name { get; set; } = null!;
 
