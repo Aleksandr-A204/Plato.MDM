@@ -21,6 +21,6 @@ namespace Plato.MDM.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> GetAlVersions() => Ok(await _mdmRepository.GetAllDirectoryVersionsAsync());
+        public async Task<ActionResult> GetAlVersions() => Ok(await _mdmRepository.GetAllVersionsAsync());
     }
 }
