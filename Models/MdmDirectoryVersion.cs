@@ -6,10 +6,10 @@ namespace Plato.MDM.Models;
 public partial class MdmDirectoryVersion
 {
     [DataMember(Name = "id")]
-    public Guid Id { get; }
+    public Guid Id { get; set; }
 
     [DataMember(Name = "directoryId")]
-    public Guid? DirectoryId { get; }
+    public Guid? DirectoryId { get; set; }
 
     [DataMember(Name = "dataSourceName")]
     public string DataSourceName { get; set; } = null!;
@@ -24,7 +24,7 @@ public partial class MdmDirectoryVersion
     public string Version { get; set; } = null!;
 
     [DataMember(Name = "versionDate")]
-    public DateOnly VersionDate { get; }
+    public DateOnly VersionDate { get; set; }
 
     [DataMember(Name = "versionDescription")]
     public string VersionDescription { get; set; } = null!;

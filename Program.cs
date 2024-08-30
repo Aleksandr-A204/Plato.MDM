@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IMdmDirectoryRepository, MdmDirectoryRepository>();
 builder.Services.AddScoped<IMdmDirectoryVersionRepository, MdmDirectoryVersionRepository>();
+builder.Services.AddScoped<IMdmDirectoryLevelRepository, MdmDirectoryLevelRepository>();
+builder.Services.AddScoped<IMdmDirectoryDomainRepository, MdmDirectoryDomainRepository>();
 
 builder.Services.AddDbContext<MdmSystemContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

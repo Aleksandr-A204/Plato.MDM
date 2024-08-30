@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Plato.MDM.Models;
 using Plato.MDM.Repositories;
 using System.ComponentModel;
@@ -23,38 +22,74 @@ namespace Plato.MDM.Controllers
         [Description("Получает все справочники")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> GetAllDirectories()
-            => Ok(await _mdmRepository.GetAllDirectoriesAsync());
+        public async Task<IActionResult> GetAllDirectories()
+        {
+            try
+            {
+                return Ok(await _mdmRepository.GetAllDirectoriesAsync());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении справочников.");
+                return BadRequest("Не удалось получить справочники.");
+            }
+        }
 
         [HttpPost]
         [Description("Добавляет справочник")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Add([FromBody] MdmDirectory directory)
+        public async Task<IActionResult> AddDirectory([FromBody] MdmDirectory directory)
         {
-            _mdmRepository.AddDirectoryAsync(directory);
-            return Created("URI of the created entity", directory);
+            if (directory == null)
+                return BadRequest("Некорректные данные.");
+
+            try
+            {
+                await _mdmRepository.AddDirectoryAsync(directory);
+                return CreatedAtAction(nameof(GetAllDirectories), new { id = directory.Id }, directory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при добавлении справочника.");
+                return BadRequest("Не удалось добавить справочник.");
+            }
         }
 
         [HttpPut("{id}")]
         [Description("Редактиирует справочник")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Edit([FromBody] MdmDirectory directory)
+        public async Task<IActionResult> Update(Guid id, [FromBody] MdmDirectory updatedDirectory)
         {
-            _mdmRepository.EditDirectoryAsync(directory);
-
-            return NoContent();
+            try
+            {
+                await _mdmRepository.UpdateDirectoryAsync(id, updatedDirectory);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при редактировании справочника.");
+                return BadRequest("Не удалось редактировать справочник.");
+            }
         }
 
         [HttpDelete("{id}")]
         [Description("Удаляет справочник")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-
-            return NoContent();
+            try
+            {
+                await _mdmRepository.DeleteDirectoryAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при удалении справочника.");
+                return BadRequest("Не удалось удалить справочник.");
+            }
         }
     }
 }

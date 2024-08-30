@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Plato.MDM.Data;
 using Plato.MDM.Models;
-using System.IO;
 
 namespace Plato.MDM.Repositories
 {
@@ -14,23 +13,28 @@ namespace Plato.MDM.Repositories
             _context = context;
         }
 
-        public bool AddDirectoryAsync(MdmDirectory directory)
+        public async Task<bool> AddDirectoryAsync(MdmDirectory directory)
         {
-            _context.Add(directory);
-            return Save();
+            await _context.MdmDirectories.AddAsync(directory);
+            return await SaveAsync();
         }
 
-        public bool DeleteDirectoryAsync(Guid id)
+        public async Task<bool> DeleteDirectoryAsync(Guid id)
         {
-            _context.Entry(id).State = EntityState.Modified;
+            var directory = await _context.MdmDirectories.FindAsync(id);
+            if (directory == null) return false;
 
-            return Save();
+            _context.MdmDirectories.Remove(directory);
+            return await SaveAsync();
         }
 
-        public bool EditDirectoryAsync(MdmDirectory directory)
+        public async Task<bool> UpdateDirectoryAsync(Guid id, MdmDirectory updatedDirectory)
         {
-            _context.Entry(directory).State = EntityState.Modified;
-            return Save();
+            var directory = await _context.MdmDirectories.Where(d => d.Id == id).FirstOrDefaultAsync();
+            if (directory == null) return false;
+
+            _context.Entry(directory).CurrentValues.SetValues(updatedDirectory);
+            return await SaveAsync();
         }
 
         public async Task<IEnumerable<MdmDirectory>> GetAllDirectoriesAsync()
@@ -42,8 +46,8 @@ namespace Plato.MDM.Repositories
         public async Task<MdmDirectory> GetDirectoryByIdAsync(Guid id)
             => await _context.MdmDirectories.FirstOrDefaultAsync(x => x.Id == id) ?? new MdmDirectory();
 
-        public bool Save()
-            => _context.SaveChanges() > 0;
+        public async Task<bool> SaveAsync()
+            => await _context.SaveChangesAsync() > 0;
 
     }
 }
